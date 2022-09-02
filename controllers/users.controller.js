@@ -26,14 +26,22 @@ module.exports.getAllUsers = (req, res) => {
 //save|post a new user
 module.exports.saveAUser = (req, res) => {
   const data = req.body;
-  const userId = users.length + 1;
-  const newUser = [...users, { id: userId, ...data }];
-  //   write data
-  fs.writeFile("utils/users.json", JSON.stringify(newUser), (err) => {
-    if (err) {
-      res.send("Failed to write data");
-    } else {
-      res.send(users);
-    }
-  });
+  const { gender, name, contact, address, photoUrl } = data;
+  if (gender && name && contact && address && photoUrl) {
+    const userId = users.length + 1;
+    const newUser = [...users, { id: userId, ...data }];
+
+    //   write data
+    fs.writeFile("utils/users.json", JSON.stringify(newUser), (err) => {
+      if (err) {
+        res.send("Failed to write data");
+      } else {
+        fs.readFile("utils/users.json", (err, data) => {
+          err ? res.send("Faild to read data") : res.send(data);
+        });
+      }
+    });
+  } else {
+    res.send("Missing some data, try again");
+  }
 };

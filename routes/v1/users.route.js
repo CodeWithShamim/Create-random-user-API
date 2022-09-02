@@ -3,7 +3,7 @@ const userControllers = require("../../controllers/users.controller");
 const router = express.Router();
 
 /**
- * @api {get} /api/v1/random
+ * @api {get} /user/random
  * @apiDescription Get any random user
  * @apiPermission user
  *
@@ -19,7 +19,7 @@ const router = express.Router();
  */
 router.get("/random", userControllers.getRandomUser);
 /**
- * @api {get} /api/v1/all
+ * @api {get} /user/all
  * @apiDescription Get all the users
  * @apiPermission user
  *
@@ -36,7 +36,7 @@ router.get("/random", userControllers.getRandomUser);
 router.get("/all", userControllers.getAllUsers);
 
 /**
- * @api {post} /api/v1/save
+ * @api {post} /user/save
  * @apiDescription save a new user
  * @apiPermission user
  *
