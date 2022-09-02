@@ -6,9 +6,10 @@ module.exports.getRandomUser = (req, res, next) => {
     if (error) {
       res.send("Failed to read data");
     } else {
-      //   const random = Math.floor(Math.random() * data?.length);
-      console.log(data);
-      res.send(data);
+      const newData = JSON.parse(data.toString());
+      const randomNumber = Math.floor(Math.random() * newData.length);
+      const user = newData[randomNumber];
+      res.send(user);
     }
   });
 };
