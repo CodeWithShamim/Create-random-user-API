@@ -18,6 +18,7 @@ const router = express.Router();
  * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
  */
 router.get("/random", userControllers.getRandomUser);
+
 /**
  * @api {get} /user/all
  * @apiDescription Get all the users
@@ -51,6 +52,7 @@ router.get("/all", userControllers.getAllUsers);
  * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
  */
 router.post("/save", userControllers.saveAUser);
+
 /**
  * @api {update} /user/update:id
  * @apiDescription update a new user
@@ -67,21 +69,39 @@ router.post("/save", userControllers.saveAUser);
  * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
  */
 router.patch("/update/:id", userControllers.updateAUser)
-    /**
-     * @api {delete} /user/delete:id
-     * @apiDescription delete a new user
-     * @apiPermission user
-     *
-     * @apiHeader {String} Authorization   User's access token
-     *
-     * @apiParam  {Number{1-}}         [page=1]     List page
-     * @apiParam  {Number{1-100}}      [limit=10]  Users per page
-     *
-     * @apiSuccess {Object[]} all the tools.
-     *
-     * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
-     * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
-     */
+
+/**
+ * @api {update} /user/bulk-update
+ * @apiDescription update multiple user. received data from body and provide multiple ids using array id
+ * @apiPermission user
+ *
+ * @apiHeader {String} Authorization   User's access token
+ *
+ * @apiParam  {Number{1-}}         [page=1]     List page
+ * @apiParam  {Number{1-100}}      [limit=10]  Users per page
+ *
+ * @apiSuccess {Object[]} all the tools.
+ *
+ * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
+ * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
+ */
+router.patch("/bulk-update", userControllers.bulkUpdateUser)
+
+/**
+ * @api {delete} /user/delete:id
+ * @apiDescription delete a new user
+ * @apiPermission user
+ *
+ * @apiHeader {String} Authorization   User's access token
+ *
+ * @apiParam  {Number{1-}}         [page=1]     List page
+ * @apiParam  {Number{1-100}}      [limit=10]  Users per page
+ *
+ * @apiSuccess {Object[]} all the tools.
+ *
+ * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
+ * @apiError (Forbidden 403)     Forbidden     Only admins can access the data
+ */
 router.delete("/delete/:id", userControllers.deleteAUser)
 
 module.exports = router;
