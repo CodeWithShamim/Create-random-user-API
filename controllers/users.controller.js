@@ -3,11 +3,8 @@ const fs = require("fs");
 // read file
 let users = [];
 fs.readFile("utils/users.json", (err, data) => {
-  if (err) {
-    res.send("Failed to read data");
-  } else {
-    users = JSON.parse(data.toString());
-  }
+  if (err) res.send("Failed to read data");
+  else users = JSON.parse(data.toString());
 });
 
 // get random user
@@ -33,15 +30,33 @@ module.exports.saveAUser = (req, res) => {
 
     //   write data
     fs.writeFile("utils/users.json", JSON.stringify(newUser), (err) => {
-      if (err) {
-        res.send("Failed to write data");
-      } else {
+      if (err) res.send("Failed to write data");
+      else {
         fs.readFile("utils/users.json", (err, data) => {
           err ? res.send("Faild to read data") : res.send(data);
         });
       }
     });
-  } else {
-    res.send("Missing some data, try again");
+  } else res.send("Missing some data, try again");
+};
+
+// delete a user
+module.exports.deleteAUser = (req, res) => {
+  const id = req.params.id;
+  if (isNaN(id)) res.send("Please provide a number id");
+  else {
+    const checkId = users.find((user) => user.id === Number(id));
+
+    if (checkId) {
+      const filterUser = users.filter((user) => user.id !== Number(id));
+      fs.writeFile("utils/users.json", JSON.stringify(filterUser), (err) => {
+        if (err) res.send("Failed to write data");
+        else {
+          fs.readFile("utils/users.json", (err, data) => {
+            err ? res.send("Faild to read data") : res.send(data);
+          });
+        }
+      });
+    } else res.send(`${id} id is not find`);
   }
 };
