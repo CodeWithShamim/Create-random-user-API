@@ -40,6 +40,42 @@ module.exports.saveAUser = (req, res) => {
   } else res.send("Missing some data, try again");
 };
 
+// update a user
+module.exports.updateAUser = (req, res) => {
+  const data = req.body;
+  const { gender, name, contact, address, photoUrl } = data;
+  const id = req.params.id;
+
+  if (isNaN(id)) res.send("Please provide a number id");
+  else {
+    const findUser = users.find((user) => user.id === Number(id));
+    const filterUser = users.filter((user) => user.id !== Number(id));
+
+    if (findUser && data) {
+      const newUser = [
+        ...filterUser,
+        {
+          ...findUser,
+          gender: gender ? gender : findUser.gender,
+          name: name ? name : findUser.name,
+          contact: contact ? contact : findUser.contact,
+          address: address ? address : findUser.address,
+          photoUrl: photoUrl ? photoUrl : findUser.photoUrl,
+        },
+      ];
+
+      fs.writeFile("utils/users.json", JSON.stringify(newUser), (err) => {
+        if (err) res.send("Failed to write data");
+        else {
+          fs.readFile("utils/users.json", (err, data) => {
+            err ? res.send("Faild to read data") : res.send(data.toString());
+          });
+        }
+      });
+    } else res.send(`${id} id is not find or data not find`);
+  }
+};
+
 // delete a user
 module.exports.deleteAUser = (req, res) => {
   const id = req.params.id;
@@ -53,7 +89,7 @@ module.exports.deleteAUser = (req, res) => {
         if (err) res.send("Failed to write data");
         else {
           fs.readFile("utils/users.json", (err, data) => {
-            err ? res.send("Faild to read data") : res.send(data);
+            err ? res.send("Faild to read data") : res.send(data.toString());
           });
         }
       });
